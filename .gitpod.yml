@@ -2,7 +2,7 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - name: Setup Conda and QIIME 2
+  - name: Setup Conda, QIIME 2, and Krona
     init: |
       CONDA_DIR="/workspace/miniconda3"
       if [ ! -d "$CONDA_DIR" ]; then
@@ -32,17 +32,20 @@ tasks:
           echo "Failed to create QIIME 2 environment after $max_retries attempts"
         fi
       fi
+      source $HOME/.bashrc
+      conda activate qiime2-amplicon-2024.5
+      conda install -c bioconda krona -y
+      ktUpdateTaxonomy.sh
     command: |
       source $HOME/.bashrc
-      if conda activate qiime2-amplicon-2024.5; then
-        echo 'conda activate qiime2-amplicon-2024.5' >> $HOME/.bashrc
-        echo "Conda and QIIME 2 setup complete. Verifying installation..."
-        conda info
-        qiime --version
-        echo "Setup complete. You can now use QIIME 2 commands."
-      else
-        echo "Failed to activate QIIME 2 environment. Please check the installation logs and try again."
-      fi
+      conda activate qiime2-amplicon-2024.5
+      echo 'conda activate qiime2-amplicon-2024.5' >> $HOME/.bashrc
+      echo "Conda, QIIME 2, and Krona setup complete. Verifying installation..."
+      conda info
+      qiime --version
+      echo "Krona version:"
+      ktImportTaxonomy --version
+      echo "Setup complete. You can now use QIIME 2 and Krona commands."
 
 vscode:
   extensions:
