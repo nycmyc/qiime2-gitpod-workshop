@@ -12,6 +12,7 @@ tasks:
       fi
       echo 'export PATH="$CONDA_DIR/bin:$PATH"' >> $HOME/.bashrc
       echo '. $CONDA_DIR/etc/profile.d/conda.sh' >> $HOME/.bashrc
+      echo 'conda activate qiime2-amplicon-2024.5' >> $HOME/.bashrc
       source $HOME/.bashrc
       conda init bash
       if [ ! -d "$CONDA_DIR/envs/qiime2-amplicon-2024.5" ]; then
@@ -20,8 +21,6 @@ tasks:
       fi
     command: |
       source $HOME/.bashrc
-      conda activate qiime2-amplicon-2024.5
-      echo 'conda activate qiime2-amplicon-2024.5' >> $HOME/.bashrc
       echo "Conda and QIIME 2 setup complete. Verifying installation..."
       conda info
       qiime --version
