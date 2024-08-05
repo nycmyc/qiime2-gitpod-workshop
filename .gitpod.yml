@@ -2,7 +2,7 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - name: Setup Conda, QIIME 2, and q2-krona
+  - name: Setup Conda, QIIME 2, q2-krona, and Krona
     init: |
       CONDA_DIR="/workspace/miniconda3"
       if [ ! -d "$CONDA_DIR" ]; then
@@ -34,15 +34,19 @@ tasks:
       fi
       source $HOME/.bashrc
       conda activate qiime2-amplicon-2024.5
+      conda install -c bioconda krona -y
+      ktUpdateTaxonomy.sh
       pip install git+https://github.com/kaanb93/q2-krona.git
       qiime dev refresh-cache
     command: |
       source $HOME/.bashrc
       conda activate qiime2-amplicon-2024.5
       echo 'conda activate qiime2-amplicon-2024.5' >> $HOME/.bashrc
-      echo "Conda, QIIME 2, and q2-krona setup complete. Verifying installation..."
+      echo "Conda, QIIME 2, q2-krona, and Krona setup complete. Verifying installation..."
       conda info
       qiime --version
+      echo "Verifying Krona installation:"
+      which ktImportText
       echo "Verifying q2-krona plugin installation:"
       qiime krona --help
       echo "Setup complete. You can now use QIIME 2 commands including the q2-krona plugin."
