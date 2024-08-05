@@ -16,35 +16,32 @@ tasks:
       conda init bash
       if [ ! -d "$CONDA_DIR/envs/qiime2-amplicon-2024.5" ]; then
         conda update -n base -c defaults conda
-        max_retries=3
-        retry_count=0
-        while [ $retry_count -lt $max_retries ]; do
-          if conda env create -n qiime2-amplicon-2024.5 --file https://data.qiime2.org/distro/amplicon/qiime2-amplicon-2024.5-py39-linux-conda.yml; then
-            echo "QIIME 2 environment created successfully"
-            break
-          else
-            echo "Failed to create QIIME 2 environment. Retrying in 10 seconds..."
-            sleep 10
-            ((retry_count++))
-          fi
-        done
-        if [ $retry_count -eq $max_retries ]; then
-          echo "Failed to create QIIME 2 environment after $max_retries attempts"
-        fi
+        conda env create -n qiime2-amplicon-2024.5 --file https://data.qiime2.org/distro/amplicon/qiime2-amplicon-2024.5-py39-linux-conda.yml
       fi
     command: |
       source $HOME/.bashrc
-      if conda activate qiime2-amplicon-2024.5; then
-        echo 'conda activate qiime2-amplicon-2024.5' >> $HOME/.bashrc
-        echo "Conda and QIIME 2 setup complete. Verifying installation..."
-        conda info
-        qiime --version
-        echo "Setup complete. You can now use QIIME 2 commands."
-      else
-        echo "Failed to activate QIIME 2 environment. Please check the installation logs and try again."
-      fi
+      conda activate qiime2-amplicon-2024.5
+      echo 'conda activate qiime2-amplicon-2024.5' >> $HOME/.bashrc
+      echo "Conda and QIIME 2 setup complete. Verifying installation..."
+      conda info
+      qiime --version
+      echo "Setup complete. You can now use QIIME 2 commands."
+
+  - name: Cleanup
+    command: |
+      conda deactivate
+      conda clean --all -y
+    openMode: tab-after
 
 vscode:
   extensions:
     - ms-python.python
     - ms-python.debugpy
+
+github:
+  prebuilds:
+    master: true
+    branches: true
+    pullRequests: true
+    addCheck: true
+    addComment: true
