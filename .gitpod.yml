@@ -15,9 +15,10 @@ tasks:
       conda env create -n qiime2-amplicon-2024.5 --file https://data.qiime2.org/distro/amplicon/qiime2-amplicon-2024.5-py39-linux-conda.yml
       echo 'eval "$(conda shell.bash hook)"' >> $HOME/.bashrc
       echo 'conda activate qiime2-amplicon-2024.5' >> $HOME/.bashrc
-      echo 'source tab-qiime' >> $HOME/.bashrc
+      echo 'source $(which tab-qiime)' >> $HOME/.bashrc
     command: |
       source $HOME/.bashrc
+      echo "QIIME 2 environment activated and tab completion enabled. Try typing 'qiime i' and press Tab."
       qiime --help
 
 vscode:
