@@ -12,31 +12,37 @@ tasks:
       fi
       echo 'export PATH="$CONDA_DIR/bin:$PATH"' >> $HOME/.bashrc
       echo '. $CONDA_DIR/etc/profile.d/conda.sh' >> $HOME/.bashrc
-      echo 'conda activate qiime2-amplicon-2024.5' >> $HOME/.bashrc
       source $HOME/.bashrc
       conda init bash
       if [ ! -d "$CONDA_DIR/envs/qiime2-amplicon-2024.5" ]; then
         conda update -n base -c defaults conda
-        conda env create -n qiime2-amplicon-2024.5 --file https://data.qiime2.org/distro/amplicon/qiime2-amplicon-2024.5-py39-linux-conda.yml
+        max_retries=3
+        retry_count=0
+        while [ $retry_count -lt $max_retries ]; do
+          if conda env create -n qiime2-amplicon-2024.5 --file https://data.qiime2.org/distro/amplicon/qiime2-amplicon-2024.5-py39-linux-conda.yml; then
+            echo "QIIME 2 environment created successfully"
+            break
+          else
+            echo "Failed to create QIIME 2 environment. Retrying in 10 seconds..."
+            sleep 10
+            ((retry_count++))
+          fi
+        done
+        if [ $retry_count -eq $max_retries ]; then
+          echo "Failed to create QIIME 2 environment after $max_retries attempts"
+        fi
       fi
     command: |
       source $HOME/.bashrc
-      echo "Conda and QIIME 2 setup complete. Verifying installation..."
-      conda info
-      qiime --version
-      echo "Setup complete. You can now use QIIME 2 commands."
-
-  - name: Cleanup
-    command: |
-      source $HOME/.bashrc
-      if command -v conda &> /dev/null; then
-        conda deactivate
-        conda clean --all -y
-        echo "Conda cleanup completed."
+      if conda activate qiime2-amplicon-2024.5; then
+        echo 'conda activate qiime2-amplicon-2024.5' >> $HOME/.bashrc
+        echo "Conda and QIIME 2 setup complete. Verifying installation..."
+        conda info
+        qiime --version
+        echo "Setup complete. You can now use QIIME 2 commands."
       else
-        echo "Conda not found. Skipping cleanup."
+        echo "Failed to activate QIIME 2 environment. Please check the installation logs and try again."
       fi
-    openMode: tab-after
 
 vscode:
   extensions:
