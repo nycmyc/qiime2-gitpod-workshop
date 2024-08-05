@@ -10,9 +10,12 @@ tasks:
       echo 'export PATH="$HOME/miniconda/bin:$PATH"' >> $HOME/.bashrc
       source $HOME/.bashrc
       conda init bash
+      conda init zsh
       source $HOME/.bashrc
       conda update -n base -c defaults conda
       conda env create -n qiime2-amplicon-2024.5 --file https://data.qiime2.org/distro/amplicon/qiime2-amplicon-2024.5-py39-linux-conda.yml
+      echo 'source tab-qiime' >> $HOME/.bashrc
+      echo 'autoload bashcompinit && bashcompinit && source tab-qiime' >> $HOME/.zshrc
     command: |
       source $HOME/.bashrc
       conda activate qiime2-amplicon-2024.5
