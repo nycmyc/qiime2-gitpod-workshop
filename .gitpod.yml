@@ -43,9 +43,9 @@ tasks:
       echo "Conda, QIIME 2, and Krona setup complete. Verifying installation..."
       conda info
       qiime --version
-      echo "Krona version:"
-      ktImportTaxonomy --version
-      echo "Setup complete. You can now use QIIME 2 and Krona commands."
+      echo "Verifying Krona installation:"
+      qiime krona --help
+      echo "Setup complete. You can now use QIIME 2 commands including Krona plugin."
 
 vscode:
   extensions:
