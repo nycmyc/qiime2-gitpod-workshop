@@ -29,19 +29,17 @@ tasks:
 
   - name: Cleanup
     command: |
-      conda deactivate
-      conda clean --all -y
+      source $HOME/.bashrc
+      if command -v conda &> /dev/null; then
+        conda deactivate
+        conda clean --all -y
+        echo "Conda cleanup completed."
+      else
+        echo "Conda not found. Skipping cleanup."
+      fi
     openMode: tab-after
 
 vscode:
   extensions:
     - ms-python.python
     - ms-python.debugpy
-
-github:
-  prebuilds:
-    master: true
-    branches: true
-    pullRequests: true
-    addCheck: true
-    addComment: true
