@@ -4,18 +4,24 @@ image:
 tasks:
   - name: Setup Conda and QIIME 2
     init: |
-      wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-      bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda
-      rm Miniconda3-latest-Linux-x86_64.sh
-      echo 'export PATH="$HOME/miniconda/bin:$PATH"' >> $HOME/.bashrc
-      echo '. $HOME/miniconda/etc/profile.d/conda.sh' >> $HOME/.bashrc
-      echo 'conda activate qiime2-amplicon-2024.5' >> $HOME/.bashrc
+      CONDA_DIR="/workspace/miniconda3"
+      if [ ! -d "$CONDA_DIR" ]; then
+        wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+        bash Miniconda3-latest-Linux-x86_64.sh -b -p $CONDA_DIR
+        rm Miniconda3-latest-Linux-x86_64.sh
+      fi
+      echo 'export PATH="$CONDA_DIR/bin:$PATH"' >> $HOME/.bashrc
+      echo '. $CONDA_DIR/etc/profile.d/conda.sh' >> $HOME/.bashrc
       source $HOME/.bashrc
       conda init bash
-      conda update -n base -c defaults conda
-      conda env create -n qiime2-amplicon-2024.5 --file https://data.qiime2.org/distro/amplicon/qiime2-amplicon-2024.5-py39-linux-conda.yml
+      if [ ! -d "$CONDA_DIR/envs/qiime2-amplicon-2024.5" ]; then
+        conda update -n base -c defaults conda
+        conda env create -n qiime2-amplicon-2024.5 --file https://data.qiime2.org/distro/amplicon/qiime2-amplicon-2024.5-py39-linux-conda.yml
+      fi
     command: |
       source $HOME/.bashrc
+      conda activate qiime2-amplicon-2024.5
+      echo 'conda activate qiime2-amplicon-2024.5' >> $HOME/.bashrc
       echo "Conda and QIIME 2 setup complete. Verifying installation..."
       conda info
       qiime --version
