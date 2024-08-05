@@ -30,11 +30,4 @@ tasks:
 vscode:
   extensions:
     - ms-python.python
-
-github:
-  prebuilds:
-    master: true
-    branches: true
-    pullRequests: true
-    addCheck: true
-    addComment: true
+    - ms-python.debugpy
