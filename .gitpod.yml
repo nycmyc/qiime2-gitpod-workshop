@@ -2,7 +2,7 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - name: Setup Conda, QIIME 2, q2-krona, and Krona
+  - name: Setup For BwoB Intro To Bioinformatics (Conda, QIIME 2, q2-krona, and Krona)
     init: |
       CONDA_DIR="/workspace/miniconda3"
       if [ ! -d "$CONDA_DIR" ]; then
